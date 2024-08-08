@@ -1,4 +1,5 @@
---stored procedure which computes and store the average weighted score for all students.
+-- Stored procedure which computes and stores the average weighted score for all students.
+
 DELIMITER //
 
 CREATE PROCEDURE ComputeAverageWeightedScoreForUsers()
@@ -6,7 +7,7 @@ BEGIN
     DECLARE done INT DEFAULT 0;
     DECLARE user_id INT;
     DECLARE total_weighted_score FLOAT DEFAULT 0;
-    DECLARE total_weight INT DEFAULT 0;
+    DECLARE total_weight FLOAT DEFAULT 0;  -- Changed INT to FLOAT to match with the weighted score
 
     -- Cursor to iterate over each user
     DECLARE user_cursor CURSOR FOR SELECT id FROM users;
@@ -25,14 +26,14 @@ BEGIN
         SET total_weight = 0;
 
         -- Calculate the total weighted score for the current user
-        SELECT SUM(c.score * p.weight)
+        SELECT IFNULL(SUM(c.score * p.weight), 0)
         INTO total_weighted_score
         FROM corrections c
         JOIN projects p ON c.project_id = p.id
         WHERE c.user_id = user_id;
 
         -- Calculate the total weight for the current user
-        SELECT SUM(p.weight)
+        SELECT IFNULL(SUM(p.weight), 0)
         INTO total_weight
         FROM corrections c
         JOIN projects p ON c.project_id = p.id
