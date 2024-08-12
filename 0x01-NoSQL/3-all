@@ -1,0 +1,12 @@
+// my comment
+
+// Connect to the specified database
+var db = connect('mongodb://127.0.0.1:27017/' + dbName);
+
+// List all documents in the 'school' collection
+var cursor = db.school.find();
+
+// Print each document
+cursor.forEach(function(doc) {
+    printjson(doc);
+});

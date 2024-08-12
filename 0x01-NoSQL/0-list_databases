@@ -1,0 +1,11 @@
+// my comment
+
+// Get the list of all databases
+var result = db.adminCommand('listDatabases');
+
+// Iterate through each database and print its name and size
+result.databases.forEach(function(database) {
+    var sizeInGB = (database.sizeOnDisk / (1024 * 1024 * 1024)).toFixed(3);
+    print(database.name + ' ' + sizeInGB + 'GB');
+});
+

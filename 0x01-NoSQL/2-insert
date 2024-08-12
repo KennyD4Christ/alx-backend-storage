@@ -1,0 +1,14 @@
+// my comment
+
+// Retrieve the database name from the command-line arguments
+var dbName = (typeof db !== 'undefined') ? db.getName() : '';
+
+// Switch to the specified database
+var db = connect('mongodb://127.0.0.1:27017/' + dbName);
+
+// Insert a document into the collection 'school'
+var result = db.school.insert({ name: 'Holberton school' });
+
+// Print the result of the insertion
+printjson(result);
+

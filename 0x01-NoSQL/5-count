@@ -1,0 +1,13 @@
+// my comment
+
+// Retrieve the database name from the command-line arguments
+var dbName = (typeof db !== 'undefined') ? db.getName() : '';
+
+// Connect to the specified database
+var db = connect('mongodb://127.0.0.1:27017/' + dbName);
+
+// Count the number of documents in the 'school' collection
+var count = db.school.count();
+
+// Print the count
+print(count);

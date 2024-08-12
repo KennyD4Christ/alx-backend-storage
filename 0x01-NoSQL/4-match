@@ -1,0 +1,16 @@
+// my comment
+
+// Retrieve the database name from the command-line arguments
+var dbName = (typeof db !== 'undefined') ? db.getName() : '';
+
+// Connect to the specified database
+var db = connect('mongodb://127.0.0.1:27017/' + dbName);
+
+// Query to find documents where name="Holberton school"
+var cursor = db.school.find({ name: "Holberton school" });
+
+// Print each matching document
+cursor.forEach(function(doc) {
+    printjson(doc);
+});
+

@@ -1,0 +1,7 @@
+// my comment
+
+// Switch to the database my_db (creates it if it doesn't exist)
+use('my_db');
+
+// Confirm the switch to the database
+print('switched to db my_db');

@@ -1,0 +1,13 @@
+// my comment
+
+// Retrieve the database name from the command-line arguments
+var dbName = (typeof db !== 'undefined') ? db.getName() : '';
+
+// Connect to the specified database
+var db = connect('mongodb://127.0.0.1:27017/' + dbName);
+
+// Delete all documents with name="Holberton school"
+var result = db.school.remove({ name: "Holberton school" });
+
+// Print the result of the delete operation
+printjson({ acknowledged: true, deletedCount: result.nRemoved });
