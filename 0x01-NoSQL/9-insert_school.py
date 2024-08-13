@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
-
-"""
-Module for Listing all documents in a collection
-"""
-
-from typing import List, Dict
-from pymongo.collection import Collection
+"""Module for inserting a new document into a MongoDB collection."""
 
 
-def list_all(mongo_collection: Collection) -> List[Dict]:
-    """ List all documents in a collection.
+def insert_school(mongo_collection, **kwargs):
+    """
+    Inserts a new document in a collection based on kwargs.
 
     Args:
-        mongo_collection (Collection): The pymongo collection object.
+        mongo_collection: The pymongo collection object.
+        **kwargs: Arbitrary keyword arguments representing the fields of the
+        document.
 
     Returns:
-        List[Dict]: A list of all documents in the collection.
+        The new _id of the inserted document.
     """
-    return list(mongo_collection.find())
-
-
-if __name__ == "__main__":
+    new_document = mongo_collection.insert_one(kwargs)
+    return new_document.inserted_id
