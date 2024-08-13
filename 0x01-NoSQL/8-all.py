@@ -5,7 +5,7 @@ from typing import List, Dict
 from pymongo.collection import Collection
 
 
-def list_all(mongo_collection: Collection) -> List[Dict]:
+def list_all(mongo_collection: (Collection)) -> List[Dict]:
     """ List all documents in a collection.
 
     Args:
