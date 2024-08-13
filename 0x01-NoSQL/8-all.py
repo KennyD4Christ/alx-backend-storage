@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-""" 8-all """
+"""
+Module for Listing all documents in a collection
+"""
 
 from typing import List, Dict
 from pymongo.collection import Collection
 
 
-def list_all(mongo_collection: (Collection)) -> List[Dict]:
+def list_all(mongo_collection: Collection) -> List[Dict]:
     """ List all documents in a collection.
 
     Args:
