@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-""" 10-update_topics """
-
-from pymongo.collection import Collection
-from typing import List
+"""Module for updating topics of a school document in a MongoDB collection."""
 
 
-def update_topics(mongo_collection: Collection, name: str,
-                  topics: List[str]) -> None:
-    """ Update the topics field for all documents with the specified name.
-
-    Args:
-        mongo_collection (Collection): The pymongo collection object.
-        name (str): The name of the school document(s) to update.
-        topics (List[str]): The list of topics to set in the topics field.
+def update_topics(mongo_collection, name, topics):
     """
-    result = mongo_collection.update_many(
+    Changes all topics of a school document based on the name.
+    
+    Args:
+        mongo_collection: The pymongo collection object.
+        name (str): The school name to update.
+        topics (list of str): The list of topics to be set for the school.
+    
+    Returns:
+        None
+    """
+    mongo_collection.update_many(
         {"name": name},
         {"$set": {"topics": topics}}
     )
-    print(result.raw_result)  # Print raw result for debugging
