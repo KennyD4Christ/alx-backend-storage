@@ -1,27 +1,24 @@
 #!/usr/bin/env python3
-""" 101-students """
+"""
+Module for retrieving students sorted by average score from a MongoDB
+collection.
+"""
 
-from typing import List, Dict
-from pymongo.collection import Collection
 
-
-def top_students(mongo_collection: Collection) -> List[Dict]:
+def top_students(mongo_collection):
     """
-    Returns a list of all students sorted by average score.
+    Returns a list of all students sorted by their average score.
 
     Args:
-        mongo_collection (Collection): The pymongo collection object for
-        students.
+        mongo_collection: The pymongo collection object.
 
     Returns:
-        List[Dict]: A list of students with their averageScore, sorted by
-        averageScore.
+        A list of dictionaries where each dictionary represents a student with
+        their average score.
     """
-    # Aggregation pipeline
     pipeline = [
         {
-            "$project": {
-                "name": 1,
+            "$addFields": {
                 "averageScore": {
                     "$avg": "$topics.score"
                 }
@@ -33,8 +30,4 @@ def top_students(mongo_collection: Collection) -> List[Dict]:
             }
         }
     ]
-
-    # Execute aggregation pipeline
-    results = list(mongo_collection.aggregate(pipeline))
-
-    return results
+    return list(mongo_collection.aggregate(pipeline))
