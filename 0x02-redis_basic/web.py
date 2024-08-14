@@ -1,55 +1,57 @@
 #!/usr/bin/env python3
 """
-This module defines a function to fetch and cache HTML content of a URL
-with request count tracking and an expiration time.
+This module contains the get_page function which fetches and caches
+the HTML content of a given URL. It tracks the number of accesses
+to the URL and caches the result for a short duration.
 """
 
-import redis
 import requests
+import redis
 from typing import Callable
 from functools import wraps
 
+# Connect to Redis
 r = redis.Redis()
 
-
-def cache_page(expiration: int = 10) -> Callable:
+def cache_page(expiration: int):
     """
-    Decorator to cache the HTML content of a URL and track access counts.
+    Decorator that caches the result of the function for a given
+    expiration time and tracks the number of times the URL is accessed.
 
     Args:
-        expiration (int): The expiration time for the cached content in seconds
+        expiration (int): The expiration time for the cache in seconds.
 
     Returns:
-        Callable: The decorated function.
+        Callable: The wrapped function.
     """
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(url: str) -> str:
-            cache_key = f"count:{url}"
-            cached_content = r.get(cache_key)
+            # Track access count
+            r.incr(f"count:{url}")
+            # Check if URL is cached
+            cached_page = r.get(url)
+            if cached_page:
+                return cached_page.decode('utf-8')
 
-            if cached_content:
-                return cached_content.decode("utf-8")
+            # Fetch and cache the page
+            page_content = func(url)
+            r.setex(url, expiration, page_content)
+            return page_content
 
-            html_content = func(url)
-            r.incr(cache_key)
-            r.setex(cache_key, expiration, html_content)
-
-            return html_content
         return wrapper
     return decorator
 
-
-@cache_page()
+@cache_page(expiration=10)
 def get_page(url: str) -> str:
     """
-    Fetches the HTML content of the specified URL and caches it.
+    Fetches the HTML content of a given URL.
 
     Args:
-        url (str): The URL to fetch the content from.
+        url (str): The URL to fetch.
 
     Returns:
-        str: The HTML content of the URL.
+        str: The HTML content of the page.
     """
     response = requests.get(url)
     return response.text
