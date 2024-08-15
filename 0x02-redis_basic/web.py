@@ -13,6 +13,7 @@ from functools import wraps
 # Connect to Redis
 r = redis.Redis()
 
+
 def cache_page(expiration: int):
     """
     Decorator that caches the result of the function for a given
@@ -41,6 +42,7 @@ def cache_page(expiration: int):
 
         return wrapper
     return decorator
+
 
 @cache_page(expiration=10)
 def get_page(url: str) -> str:
